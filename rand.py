@@ -1,6 +1,6 @@
 import random
 import io
-from flask import Flask, make_response, redirect, url_for, jsonify, send_from_directory
+from flask import Flask, make_response, redirect, url_for, jsonify, send_from_directory, request
 import requests
 app = Flask(__name__)
 
@@ -40,10 +40,26 @@ def random_motox():
 @app.route('/random.json')
 def random_motox_json():
     """Return a JSON object with random values."""
-    front = random.choice(fronts)
-    back = random.choice(backs.keys())
-    accent = random.choice(accents.keys())
-    wallpaper = random.choice(wallpapers)
+    if request.args.get('front'):
+        front = request.args.get('front')
+    else:
+        front = random.choice(fronts)
+
+    if request.args.get('back'):
+        back = request.args.get('back')
+    else:
+        back = random.choice(backs.keys())
+
+    if request.args.get('accent'):
+        accent = request.args.get('accent')
+    else:
+        accent = random.choice(accents.keys())
+
+    if request.args.get('wallpaper'):
+        wallpaper = request.args.get('wallpaper')
+    else:
+        wallpaper = random.choice(wallpapers)
+        
     return jsonify({
         "front": front,
         "back": back,
