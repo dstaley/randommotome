@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset=utf-8 />
+  <meta http-equiv="Content-Language" content="en" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="What are you thankful for?"/>
+  <meta property="og:url" content="http://randommoto.me"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:description" content="Can't decide how to customize your Moto X? Let the fates decide!"/>
+  <title>Moto X Randomizer</title>
+  <script src="http://code.jquery.com/jquery-2.0.2.js"></script>
+  <script src="http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v1.2.1.js"></script>
+  <script src="http://builds.emberjs.com/tags/v1.3.1/ember.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+
+  <style>
+
+    body {
+      -webkit-transition: background-color 2s ease;
+      -moz-transition: background-color 2s ease;
+      -o-transition: background-color 2s ease;
+      transition: background-color 2s ease;
+      font-family: 'Open Sans', sans-serif;
+      color: #fff;
+    }
+    h1 {
+      font-size: 80px;
+      font-weight: 700;
+      -webkit-transition: color 2s ease;
+      -moz-transition: color 2s ease;
+      -o-transition: color 2s ease;
+      transition: color 2s ease;
+    }
+    img {
+      width: 100%;
+    }
+    a, a:hover {
+      color: #fff;
+    }
+    [data-color-id="OP100024"] {
+      background-color: #007AC9;
+    }
+    [data-color-id="OP100026"] {
+      background-color: #B3B3B3;
+      color: #000;
+    }
+    [data-color-id="OP100028"] {
+      background-color: #e0e71c;
+      color: #000;
+    }
+    [data-color-id="OP100028"] a, [data-color-id="OP100028"] a:hover, [data-color-id="OP100026"] a, [data-color-id="OP100026"] a:hover {
+      color: #000;
+    }
+    [data-color-id="OP100050"] {
+      background-color: #FF0E49;
+    }
+    [data-color-id="OP100049"] {
+      background-color: #AF1889;
+    }
+    [data-color-id="OP100027"] {
+      background-color: #212121;
+    }
+    [data-color-id="OP100025"] {
+      background-color: #ffa02f;
+    }
+    button {
+        width: auto;
+        height: auto;
+        margin: 0;
+        padding: 0 83px;
+        border: none;
+        background: #fff;
+        display: inline-block;
+        position: relative;
+        cursor: pointer;
+        text-aling: center;
+        text-decoration: none;
+        text-align: left;
+        font-family: "Open Sans", sans-serif;
+        -webkit-border-radius: 4px 4px;
+        -moz-border-radius: 4px / 4px;
+        border-radius: 4px / 4px;
+        -webkit-transition-property: background-color;
+        -moz-transition-property: background-color;
+        -o-transition-property: background-color;
+        transition-property: background-color;
+        -webkit-transition-duration: 0.12s;
+        -moz-transition-duration: 0.12s;
+        -o-transition-duration: 0.12s;
+        transition-duration: 0.12s;
+    }
+    button span {
+        width: 100%;
+        padding: 0;
+        border: none;
+        background: none;
+        display: block;
+        font-size: 16px;
+        line-height: 68px;
+        text-align: left;
+        outline: none;
+        font-weight: 600;
+    }
+    button:hover {
+        border: none;
+        background-color: #1f282b;
+    }
+    button:hover:after {
+        background-position: 0 -332px
+    }
+   button span {
+        color: #80888c;
+        font-weight: 600;
+        line-height: 1.22222;
+        font-size: 18px;
+        padding: 17px 0;
+        display: inline-block;
+    }
+   button:hover {
+        background: #5789eb;
+        color: #fff;
+    }
+   button:hover span {
+        color: #fff
+    }
+   button:hover:before {
+        background-position: 0 -332px
+    }
+    .credits {
+      text-align: center;
+      padding-top: 10px;
+    }
+    @media (min-width: 1200px) {
+      .controls {
+        padding-top: 130px;
+      }
+    }
+    @media (max-width: 1199px) {
+      .controls {
+        text-align: center;
+      }
+      h1 {
+        font-size: 32px;
+      }
+     button {
+          padding: 0 30px;
+      }
+    }
+  </style>
+</head>
+<body data-color-id="blue">
+  <script type="text/x-handlebars" data-template-name="application">
+    <div class="container">
+      {{outlet}}
+      {{outlet modal}}
+    </div>
+  </script>
+  <script type="text/x-handlebars" data-template-name="index">
+    <div class="col-lg-7"><img {{bind-attr src="url"}} /></div>
+    <div class="controls col-lg-5">
+      <h1>What do you think?</h1>
+      <button {{action 'refresh'}}><span>Nah.</span></button>
+      <button {{action 'motomake' model}}><span>Love it!</span></button>
+      <p class="credits">Made with &hearts; by <a href="https://twitter.com/dstaley">@dstaley</p>
+    </div>
+  </script>
+<script>
+  App = Ember.Application.create({});
+
+  App.IndexController = Ember.ObjectController.extend({
+    actions: {
+      refresh: function() {
+        var controller = this;
+        $.getJSON('/random.json').success(function(response) {
+          console.log(response.accent);
+          $('body').attr('data-color-id', response.accent);
+          controller.set('model', response);
+        });
+      },
+      motomake: function(model) {
+        window.open("https://www.motorola.com/us/motomaker?pid=FLEXR1&front-color=color-"+model.front+"&memory=optionMemory-16&rear-color="+model.back+"&accent-color="+model.accent+"&wallpaper-file="+model.wallpaper+"&wallpaper="+model.wallpaper);
+      }
+    }
+  });
+
+  App.IndexRoute = Ember.Route.extend({
+    model: function(){
+      return $.getJSON('/random.json').success(function(response) {
+        $('body').attr('data-color-id', response.accent);
+      });
+    }
+  });
+</script>
+</body>
+</html>
+  
