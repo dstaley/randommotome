@@ -160,6 +160,20 @@
         color: #fff;
     }
 
+    button.disabled {
+        background: #f7f8f9;
+        cursor:default;
+    }
+
+    button.disabled span {
+        color: #dfe5e9;
+        text-shadow:none;
+    }
+
+    button.disabled:hover {
+        background: #f7f8f9;
+    }
+
     .credits {
         text-align: center;
         padding-top: 10px;
@@ -198,10 +212,10 @@
     </div>
   </script>
   <script type="text/x-handlebars" data-template-name="index">
-    <div class="col-lg-7"><img {{bind-attr src="url"}} /></div>
+    <div class="col-lg-7"><img id="motox" {{bind-attr src="url"}} /></div>
     <div class="controls col-lg-5">
       <h1>What do you think?</h1>
-      <button {{action 'refresh'}}><span>Nah.</span></button>
+      <button id="nah" {{action 'refresh'}}><span>Nah.</span></button>
       <button {{action 'motomake' model}}><span>Love it!</span></button>
       <p class="credits">Made with &hearts; by <a href="https://twitter.com/dstaley">@dstaley</p>
     </div>
@@ -213,10 +227,13 @@
     actions: {
       refresh: function() {
         var controller = this;
+        $('#nah').addClass('disabled');
         $.getJSON('/random.json').success(function(response) {
-          console.log(response.accent);
-          $('body').attr('data-color-id', response.accent);
           controller.set('model', response);
+          $('#motox').on('load', function () {
+            $('#nah').removeClass('disabled');
+            $('body').attr('data-color-id', response.accent);
+          });
         });
       },
       motomake: function(model) {
