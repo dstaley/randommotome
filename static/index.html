@@ -183,6 +183,26 @@
         transition: color 2s ease;
     }
 
+    select {
+      margin-top: 10px;
+    }
+
+    #reset {
+      margin-top: 10px;
+    }
+
+    .more {
+      text-align: center;
+    }
+
+    .more:hover {
+      cursor: pointer;
+    }
+
+    .moar {
+      display: none;
+    }
+
     @media (min-width: 1200px) { 
         .controls {
             padding-top: 130px;
@@ -212,23 +232,38 @@
     </div>
   </script>
   <script type="text/x-handlebars" data-template-name="index">
-    <div class="col-lg-7"><img id="motox" {{bind-attr src="url"}} /></div>
+    <div class="col-lg-7">
+      <img id="motox" {{bind-attr src="url"}} />
+      <p class="more" {{action 'moar'}}>More Options</p>
+    </div>
     <div class="controls col-lg-5">
       <h1>What do you think?</h1>
       <button id="nah" {{action 'refresh'}}><span>Nah.</span></button>
       <button {{action 'motomake' model}}><span>Love it!</span></button>
-      <p class="credits">Made with &hearts; by <a href="https://twitter.com/dstaley">@dstaley</p>
+      <div class="moar">
+        {{view Ember.Select content=fronts value=selectedFront.code optionValuePath="content.code" optionLabelPath="content.name" class="form-control"}}
+        {{view Ember.Select content=backs value=selectedBack.code optionValuePath="content.code" optionLabelPath="content.name" class="form-control"}}
+        {{view Ember.Select content=accents value=selectedAccent.code optionValuePath="content.code" optionLabelPath="content.name" class="form-control"}}
+        <button id="reset" {{action 'reset'}}><span>Reset</span></button>
+      </div>
+      <p class="credits">Made with &hearts; by <a href="https://twitter.com/dstaley">@dstaley</a></p>
     </div>
   </script>
 <script>
   App = Ember.Application.create({});
 
   App.IndexController = Ember.ObjectController.extend({
+    fronts: [{"name":"Front"},{"name":"Black", "code":"black"},{"name":"White", "code":"white"}],
+    selectedFront: {},
+    backs: [{"name":"Back"}, {"code": "OP100019", "name": "Olive"}, {"code": "OP100018", "name": "Blush"}, {"code": "OP100015", "name": "Crimson"}, {"code": "OP100014", "name": "Turquoise"}, {"code": "OP100017", "name": "Cement"}, {"code": "OP100016", "name": "Cabernet"}, {"code": "OP100011", "name": "Teak Finish"}, {"code": "OP100010", "name": "Raspberry"}, {"code": "OP100013", "name": "Royal Blue"}, {"code": "OP100012", "name": "Bamboo"}, {"code": "OP100008", "name": "Navy"}, {"code": "OP100009", "name": "Spearmint"}, {"code": "OP100002", "name": "Black"}, {"code": "OP100003", "name": "Mint"}, {"code": "OP100006", "name": "Lemon Lime"}, {"code": "OP100007", "name": "Violet"}, {"code": "OP100004", "name": "Chalk"}, {"code": "OP100005", "name": "Cherry"}, {"code": "OP100020", "name": "Ebony Finish"}, {"code": "OP100021", "name": "Woven Black"}, {"code": "OP100022", "name": "Walnut Finish"}, {"code": "OP100023", "name": "Woven White"}],
+    selectedBack: {},
+    accents: [{"name":"Accent"}, {"code": "OP100025", "name": "Metallic Orange"}, {"code": "OP100024", "name": "Metallic Blue"}, {"code": "OP100050", "name": "Metallic Red"}, {"code": "OP100026", "name": "Metallic Silver"}, {"code": "OP100027", "name": "Metallic Black"}, {"code": "OP100049", "name": "Metallic Purple"}, {"code": "OP100028", "name": "Metallic Yellow"}],
+    selectedAccent: {},
     actions: {
       refresh: function() {
         var controller = this;
         $('#nah').addClass('disabled');
-        $.getJSON('/random.json').success(function(response) {
+        $.getJSON('/random.json',{front: controller.selectedFront.code, back: controller.selectedBack.code, accent: controller.selectedAccent.code}).success(function(response) {
           controller.set('model', response);
           $('#motox').on('load', function () {
             $('#nah').removeClass('disabled');
@@ -236,8 +271,16 @@
           });
         });
       },
+      reset: function() {
+        this.set('selectedFront',{});
+        this.set('selectedBack',{});
+        this.set('selectedAccent',{});
+      },
       motomake: function(model) {
         window.open("https://www.motorola.com/us/motomaker?pid=FLEXR1&front-color=color-"+model.front+"&memory=optionMemory-16&rear-color="+model.back+"&accent-color="+model.accent+"&wallpaper-file="+model.wallpaper+"&wallpaper="+model.wallpaper);
+      },
+      moar: function() {
+        $('.moar').slideDown();
       }
     }
   });
