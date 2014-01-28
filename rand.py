@@ -61,4 +61,7 @@ def specific_motox(front, back, accent, wallpaper):
     return resp
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    if "HEROKU" in os.environ:
+        app.run()
+    else:
+        app.run(debug=True)
