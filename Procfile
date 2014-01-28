@@ -1,1 +1,1 @@
-web: gunicorn rand:app
+web: gunicorn -w 9 -k gevent --max-requests 250 rand:app
