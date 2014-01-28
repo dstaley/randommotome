@@ -1,6 +1,6 @@
 import random
 import io
-from flask import Flask, make_response, redirect, url_for, jsonify, render_template, send_from_directory
+from flask import Flask, make_response, redirect, url_for, jsonify, send_from_directory
 import requests
 app = Flask(__name__)
 
@@ -23,11 +23,13 @@ base_url = "https://commondatastorage.googleapis.com/mm-af-images-prod/devices_o
 
 @app.route('/')
 def index():
+    """Render the Ember application."""
     return send_from_directory(app.static_folder, 'index.html')
 
 
 @app.route('/random')
 def random_motox():
+    """Redirect to a random Moto X image."""
     return redirect(url_for('specific_motox',
                             front=random.choice(fronts),
                             back=random.choice(backs.keys()),
@@ -37,6 +39,7 @@ def random_motox():
 
 @app.route('/random.json')
 def random_motox_json():
+    """Return a JSON object with random values."""
     front = random.choice(fronts)
     back = random.choice(backs.keys())
     accent = random.choice(accents.keys())
@@ -51,6 +54,7 @@ def random_motox_json():
 
 @app.route('/img/<front>/<back>/<accent>/<wallpaper>.png')
 def specific_motox(front, back, accent, wallpaper):
+    """Render a specific configuration as an image."""
     r = requests.get(base_url % (accent, front, wallpaper, back))
     resp = make_response(r.content)
     resp.headers['Content-Type'] = 'image/png'
