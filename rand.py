@@ -76,6 +76,11 @@ def specific_motox(front, back, accent, wallpaper):
     resp.headers['Content-Type'] = 'image/png'
     return resp
 
+@app.route('/favicon.ico')
+def favicon():
+    """I hate favicons."""
+    return send_from_directory(app.static_folder, 'favicon.ico')
+
 if __name__ == '__main__':
     if "HEROKU" in os.environ:
         app.run()
