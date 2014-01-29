@@ -65,7 +65,7 @@ def random_motox_json():
         "back": back,
         "accent": accent,
         "wallpaper": wallpaper,
-        "url": url_for('specific_motox', front=front, back=back, accent=accent, wallpaper=wallpaper)})
+        "url": base_url % (accent, front, wallpaper, back)})
 
 
 @app.route('/img/<front>/<back>/<accent>/<wallpaper>.png')
